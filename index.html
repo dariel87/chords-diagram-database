@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chords Diagram Database</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="chords_list.js"></script>
+    <script src="missing_chords.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <p>Chord diagram database. this page established with huge help by the following awesome github project <a href="https://github.com/T-vK/chord-collection">https://github.com/T-vK/chord-collection</a>. but why? because a simple chords with only one variation take about 1.3 Mb file size of chords.js and a complete with approxmiately 4 variations each chord could take about 13.5Mb. with that in mind, it's not a good idea to serve this JS file in a website (imagine how long would it take to load that JS file with just a cheap web server, like mine 😢).</p>
+        <p>if you need a complete chords to be hosted in your own website, then please copy <strong>chords/</strong> directory and paste it somewhere else in your web server.</p>
+        <p>BTW, this is my website <a href="https://kords.id">KORDS.id</a>.</p>
+        <hr>
+        <form action="" class="mb-5">
+            <div class="form-floating">
+                <input type="text" class="form-control" placeholder="Search" id="akord">
+                <label for="">Search</label>
+            </div>
+        </form>
+        <div class="d-flex align-items-start">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="v-pills-c-tab" data-bs-toggle="pill" data-bs-target="#v-c-home" type="button" role="tab" aria-controls="v-c-home" aria-selected="true">C</button>
+                <button class="nav-link" id="v-pills-d-tab" data-bs-toggle="pill" data-bs-target="#v-d-home" type="button" role="tab" aria-controls="v-d-home" aria-selected="true">D</button>
+                <button class="nav-link" id="v-pills-e-tab" data-bs-toggle="pill" data-bs-target="#v-e-home" type="button" role="tab" aria-controls="v-e-home" aria-selected="true">E</button>
+                <button class="nav-link" id="v-pills-f-tab" data-bs-toggle="pill" data-bs-target="#v-f-home" type="button" role="tab" aria-controls="v-f-home" aria-selected="true">F</button>
+                <button class="nav-link" id="v-pills-g-tab" data-bs-toggle="pill" data-bs-target="#v-g-home" type="button" role="tab" aria-controls="v-g-home" aria-selected="true">G</button>
+                <button class="nav-link" id="v-pills-a-tab" data-bs-toggle="pill" data-bs-target="#v-a-home" type="button" role="tab" aria-controls="v-a-home" aria-selected="true">A</button>
+                <button class="nav-link" id="v-pills-b-tab" data-bs-toggle="pill" data-bs-target="#v-b-home" type="button" role="tab" aria-controls="v-b-home" aria-selected="true">B</button>
+            </div>
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-c-home" role="tabpanel" aria-labelledby="v-pills-home-tab"></div>
+                <div class="tab-pane fade show" id="v-d-home" role="tabpanel" aria-labelledby="v-pills-home-tab"></div>
+                <div class="tab-pane fade show" id="v-e-home" role="tabpanel" aria-labelledby="v-pills-home-tab"></div>
+                <div class="tab-pane fade show" id="v-f-home" role="tabpanel" aria-labelledby="v-pills-home-tab"></div>
+                <div class="tab-pane fade show" id="v-g-home" role="tabpanel" aria-labelledby="v-pills-home-tab"></div>
+                <div class="tab-pane fade show" id="v-a-home" role="tabpanel" aria-labelledby="v-pills-home-tab"></div>
+                <div class="tab-pane fade show" id="v-b-home" role="tabpanel" aria-labelledby="v-pills-home-tab"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        $(function(){
+            var groups = ["C", "D", "E", "F", "G", "A", "B"];
+            chords = chords.sort();
+
+            for(let i = 0; i < chords.length; i++){
+                var group = chords[i].substr(0, 1);
+                for(let j = 0; j < groups.length; j++){
+                    if(groups[j] == group){
+                        if(missing_chords.indexOf(chords[i]) == -1){
+                            let lower_group = group.toLowerCase();
+                            let chord = chords[i].replace(/\//g, "_").replace(/\#/g, "__");
+                            $('#v-' + lower_group + '-home').append('<img src="chords/'+ chord +'.png" alt="'+chords[i]+'" data-name="'+ chords[i] +'" />');
+                        }
+                    }
+                }
+            }
+
+            $('#akord').on('keyup paste', function(){
+                var ak = $(this).val();
+                if(ak.length > 0){
+                    var group = ak.substr(0, 1);
+
+                    $('#v-pills-'+ group.toLowerCase() +'-tab').click();
+                    $('#v-'+ group.toLowerCase() +'-home img').hide();
+
+                    $('[data-name^="'+ ak +'"]').show();
+                }else{
+                    $('img').show();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
