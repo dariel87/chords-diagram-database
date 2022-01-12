@@ -6,4 +6,10 @@ This page established with huge help by the following awesome github project [ht
 
 if you need a complete chords to be hosted in your own website, then please copy **chords/** directory and paste it somewhere else in your web server.
 
+## Note on filenaming
+
+To prevent error in most webserver, chord with slash (compound) and hash (sharp) will be translated into _ and __ respectively. for example C/A will be C_A.png, C/A# will be C_A__.png and so on.
+
+---
+
 BTW, this is my website [KORDS.id](https://kords.id)
